@@ -1,24 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { PaperProvider } from 'react-native-paper';
+import Principal from './Components/Principal/Principal';
+// import Principal from './Components/Principal/principal.js';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Curso de react native 2023</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    return (
+        <PaperProvider >
+            <Principal/>
+        </PaperProvider>
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'lightblue',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color:'black',
-    // fontSize:'31px'
-  }
-});
