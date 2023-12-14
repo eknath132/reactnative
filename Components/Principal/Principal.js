@@ -6,6 +6,7 @@ import { Button, Icon, List, Menu, Modal, Portal, TextInput } from 'react-native
 import uuid from 'react-native-uuid';
 import { MaterialModal } from '../../Material/modal';
 import RNPickerSelect from 'react-native-picker-select';
+import { Header } from '../Header/header';
 
 export default function Principal() {
     const [ lista, setLista ] = useState([])
@@ -53,64 +54,61 @@ export default function Principal() {
         setIsOpenModal(prev => !prev)
     }
 
-    return (
-        <View style={styles.container}>
-            <View>
-                <Text style={styles.text}>Curso de react native 2023</Text>
-                <StatusBar style="auto" />
-            </View>
-            
-            <View style={styles.containerForm}>
-                <TextInput
-                    style={styles.input}
-                    label="Persona"
-                    value={valueInput}
-                    mode='outlined'
-                    onChangeText={text => handleValueInput(text)}
+    return ( 
+        <>
+            <Header title={'Lista'}/>
+            <View style={styles.container}>
+                <View style={styles.containerForm}>
+                    <TextInput
+                        style={styles.input}
+                        label="Persona"
+                        value={valueInput}
+                        mode='outlined'
+                        onChangeText={text => handleValueInput(text)}
+                    />
+                    <Button style={styles.button} mode="contained" onPress={() => handleSetLista()} >
+                        Agregar
+                    </Button>
+                </View>
+                <View style={styles.lista}>
+                    <FlatList
+                    data={lista}
+                    keyExtractor={item => item.id}
+                    renderItem={({item}) => {
+                        return(
+                            <View style={styles.containerLista} key={item.id}> 
+                                <View> 
+                                    <List.Item
+                                        title={item.name}
+                                        left={props => <List.Icon {...props} icon='account' />}
+                                    />
+                                </View>
+                                <View> 
+                                    <Button icon='delete' onPress={() => handleOpenModal(item.id)}>
+                                        Eliminar
+                                    </Button>
+                                </View>
+                            </View>
+                        )
+                    }}
                 />
-                <Button style={styles.button} mode="contained" onPress={() => handleSetLista()} >
-                    Agregar
-                </Button>
+                </View>
+                <MaterialModal
+                    isOpen={isModalOpen}
+                    isClose={() => setIsOpenModal(false)}
+                    handleAction={() => eliminarItem(removeItem)}
+                    title={'Seguro que quiere borrar esta persona?'}
+                    firstButton={'No eliminar'}
+                    secondButton={'Eliminar'}
+                />
             </View>
-            <View style={styles.lista}>
-                <FlatList
-                data={lista}
-                keyExtractor={item => item.id}
-                renderItem={({item}) => {
-                    return(
-                        <View style={styles.containerLista} key={item.id}> 
-                            <View> 
-                                <List.Item
-                                    title={item.name}
-                                    left={props => <List.Icon {...props} icon='account' />}
-                                />
-                            </View>
-                            <View> 
-                                <Button icon='delete' onPress={() => handleOpenModal(item.id)}>
-                                    Eliminar
-                                </Button>
-                            </View>
-                        </View>
-                    )
-                }}
-            />
-            </View>
-            <MaterialModal
-                isOpen={isModalOpen}
-                isClose={() => setIsOpenModal(false)}
-                handleAction={() => eliminarItem(removeItem)}
-                title={'Seguro que quiere borrar esta persona?'}
-                firstButton={'No eliminar'}
-                secondButton={'Eliminar'}
-            />
-        </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 60,
         paddingHorizontal: 20,
         backgroundColor: '#fcdbc8',
         alignItems: 'center',
